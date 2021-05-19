@@ -309,6 +309,10 @@ private:
     pnh.param<std::string>("camera_info_url", camera_info_url, "");
     // Get the desired frame_id, set to 'camera' if not found
     pnh.param<std::string>("frame_id", frame_id_, "camera");
+
+    // Flip the image if necessary (the camera is phisically turned)
+     pnh.param<bool>("flip", flip_, true);
+
     // Do not call the connectCb function until after we are done initializing.
     std::lock_guard<std::mutex> scopedLock(connect_mutex_);
 
@@ -575,7 +579,7 @@ private:
             wfov_camera_msgs::WFOVImagePtr wfov_image(new wfov_camera_msgs::WFOVImage);
             // Get the image from the camera library
             NODELET_DEBUG_ONCE("Starting a new grab from camera with serial {%d}.", spinnaker_.getSerial());
-            spinnaker_.grabImage(&wfov_image->image, frame_id_);
+            spinnaker_.grabImage(&wfov_image->image, frame_id_,flip_);
 
             // Set other values
             wfov_image->header.frame_id = frame_id_;
@@ -708,6 +712,8 @@ private:
   // For GigE cameras:
   /// If true, GigE packet size is automatically determined, otherwise packet_size_ is used:
   bool auto_packet_size_;
+  /// If true rotates the image 180 degrees (flips vertically)
+  bool flip_;
   /// GigE packet size:
   int packet_size_;
   /// GigE packet delay:

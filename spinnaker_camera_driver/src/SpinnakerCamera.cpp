@@ -320,7 +320,7 @@ void SpinnakerCamera::stop()
   }
 }
 
-void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& frame_id)
+void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& frame_id,bool& flip)
 {
   std::lock_guard<std::mutex> scopedLock(mutex_);
 
@@ -432,9 +432,21 @@ void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& fr
         int width = image_ptr->GetWidth();
         int height = image_ptr->GetHeight();
         int stride = image_ptr->GetStride();
+        uint8_t* raw_data = (uint8_t*) image_ptr->GetData();
+        //Flip if necessary (right camera is phisically rotated 180 degrees)
+        if (flip==true){
+          imageEncoding = sensor_msgs::image_encodings::BAYER_BGGR16;
+          for(int i = 0; i < (height*width); i++){
+            size_t idx2  = (height*width*2)-i;
+            uint8_t aux = raw_data[i];
+            raw_data[i]=raw_data[idx2];
+            raw_data[idx2]=aux;
+          }
+        }
+       
 
         // ROS_INFO_ONCE("\033[93m wxh: (%d, %d), stride: %d \n", width, height, stride);
-        fillImage(*image, imageEncoding, height, width, stride, image_ptr->GetData());
+        fillImage(*image, imageEncoding, height, width, stride, raw_data);
         image->header.frame_id = frame_id;
       }  // end else
     }
