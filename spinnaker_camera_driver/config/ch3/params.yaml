@@ -1,6 +1,6 @@
-acquisition_frame_rate: 15
+acquisition_frame_rate: 10
 acquisition_frame_rate_enable: false
-enable_trigger: Off
+enable_trigger: On
 trigger_selector: FrameStart
 trigger_activation_mode: RisingEdge
 trigger_source: Line3

@@ -442,6 +442,13 @@ void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& fr
             raw_data[i]=raw_data[idx2];
             raw_data[idx2]=aux;
           }
+        }else{
+          for(int i = 0; i < (height*width); i++){
+            size_t idx2  = (height*width*2)-i;
+            uint8_t aux = raw_data[i];
+            raw_data[i]=raw_data[i];
+            raw_data[idx2]=raw_data[idx2];
+          }
         }
        
 

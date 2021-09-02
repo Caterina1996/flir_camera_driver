@@ -32,8 +32,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
       rate control, and 'frame_rate' to set the frame rate value. -->
   <arg name="control_frame_rate"        default="true" />
   <arg name="frame_rate"                default="5" />
-  <arg name="left_camera_serial"        default="16401228" />
-  <arg name="right_camera_serial"       default="16401229" />
+  <!-- IDS girats -->
+  <arg name="left_camera_serial"        default="16401229" />
+  <arg name="right_camera_serial"       default="16401228" />
   <arg name="run_stereo_image_proc"     default="true" />
 
   <!-- Nodelet manager -->
@@ -47,7 +48,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
             args="load spinnaker_camera_driver/SpinnakerCameraNodelet /camera_nodelet_manager" >
         <param name="frame_id"                        value="camera_left" />
         <param name="serial"                          value="$(arg left_camera_serial)" />
-        <param name="flip"                            value="false" />
+        <param name="flip"                            value="true" />
 
         <!-- Frame rate -->
         <param name="acquisition_frame_rate_enable"   value="$(arg control_frame_rate)" />
@@ -70,7 +71,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
             args="load spinnaker_camera_driver/SpinnakerCameraNodelet /camera_nodelet_manager" >
         <param name="frame_id"                        value="camera_right" />
         <param name="serial"                          value="$(arg right_camera_serial)" />
-        <param name="flip"                            value="true" />
+        <param name="flip"                            value="false" />
 
         <!-- Frame rate -->
         <param name="acquisition_frame_rate_enable"   value="$(arg control_frame_rate)" />
