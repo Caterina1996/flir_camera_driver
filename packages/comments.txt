@@ -1,0 +1,7 @@
+Flycapture and spinnaker packages needed for the driver to work.
+Downloaded on 6/09/2021.
+They should be available in https://www.flir.es/products/spinnaker-sdk/
+but in case that the packages are not maintained any more the driver should work with this packages.
+
+This version of the driver works with USB 2.0
+
