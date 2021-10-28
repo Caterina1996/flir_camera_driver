@@ -36,6 +36,17 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <arg name="left_camera_serial"        default="16401229" />
   <arg name="right_camera_serial"       default="16401228" />
   <arg name="run_stereo_image_proc"     default="true" />
+  
+  <arg name="trans_left"     default="0" />
+  <arg name="trans_right"     default="0" />
+  <!-- 
+    0: nothing
+    1: vertical flip
+    2: 90º rotation anticlockwise
+    3: 90º rotation clockwise
+    4:test
+  -->
+
 
   <!-- Nodelet manager -->
   <!-- Both cameras are not loaded into one nodelet manager to avoid the namespacing issue. -->
@@ -48,7 +59,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
             args="load spinnaker_camera_driver/SpinnakerCameraNodelet /camera_nodelet_manager" >
         <param name="frame_id"                        value="camera_left" />
         <param name="serial"                          value="$(arg left_camera_serial)" />
-        <param name="flip"                            value="true" />
+        <param name="trans"                            value="$(arg trans_left)" />
 
         <!-- Frame rate -->
         <param name="acquisition_frame_rate_enable"   value="$(arg control_frame_rate)" />
@@ -71,7 +82,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
             args="load spinnaker_camera_driver/SpinnakerCameraNodelet /camera_nodelet_manager" >
         <param name="frame_id"                        value="camera_right" />
         <param name="serial"                          value="$(arg right_camera_serial)" />
-        <param name="flip"                            value="false" />
+        <param name="trans"                            value="$(arg trans_right)" />
 
         <!-- Frame rate -->
         <param name="acquisition_frame_rate_enable"   value="$(arg control_frame_rate)" />
@@ -89,11 +100,11 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     </group>
 
     <!-- Stereo image processing nodelet -->
-    <group if="$(arg run_stereo_image_proc)" >
+    <!-- <group if="$(arg run_stereo_image_proc)" >
       <node pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc">
         <param name="approximate_sync" value="true"/>
       </node>
-    </group>
+    </group> -->
 
   </group>
 </launch>

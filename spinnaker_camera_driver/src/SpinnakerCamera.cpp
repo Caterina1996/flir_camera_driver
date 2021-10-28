@@ -320,7 +320,7 @@ void SpinnakerCamera::stop()
   }
 }
 
-void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& frame_id,bool& flip)
+void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& frame_id,int& trans)
 {
   std::lock_guard<std::mutex> scopedLock(mutex_);
 
@@ -433,8 +433,10 @@ void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& fr
         int height = image_ptr->GetHeight();
         int stride = image_ptr->GetStride();
         uint8_t* raw_data = (uint8_t*) image_ptr->GetData();
-        //Flip if necessary (right camera is phisically rotated 180 degrees)
-        if (flip==true){
+        uint8_t* raw_data_rot = new uint8_t[width*height];
+    
+        //transformation if necessary
+        if (trans==1){
           imageEncoding = sensor_msgs::image_encodings::BAYER_BGGR16;
           for(int i = 0; i < (height*width); i++){
             size_t idx2  = (height*width*2)-i;
@@ -442,19 +444,31 @@ void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& fr
             raw_data[i]=raw_data[idx2];
             raw_data[idx2]=aux;
           }
+          fillImage(*image, imageEncoding, height, width, stride, raw_data);
+          image->header.frame_id = frame_id;
+        }else if (trans==2){
+          for(int i=0; i<width; i++) {
+            for(int j=0; j<height-1; j++) {
+              int idx1 = 0;
+              size_t idx2 = (j+1)*(width)-(i+1);
+              raw_data_rot[idx1] = raw_data[idx1];
+              idx1++;
+            }
+          }
+          fillImage(*image, imageEncoding, width, height, 3072, raw_data_rot); // len(row)*byte_encoding = 3072
+          image->header.frame_id = frame_id;
+        }else if (trans==3){
+          // add 90 rotation clockwise
         }else{
           for(int i = 0; i < (height*width); i++){
             size_t idx2  = (height*width*2)-i;
-            uint8_t aux = raw_data[i];
+            // uint8_t aux = raw_data[i];
             raw_data[i]=raw_data[i];
             raw_data[idx2]=raw_data[idx2];
           }
+          fillImage(*image, imageEncoding, height, width, stride, raw_data);
+          image->header.frame_id = frame_id;
         }
-       
-
-        // ROS_INFO_ONCE("\033[93m wxh: (%d, %d), stride: %d \n", width, height, stride);
-        fillImage(*image, imageEncoding, height, width, stride, raw_data);
-        image->header.frame_id = frame_id;
       }  // end else
     }
     catch (const Spinnaker::Exception& e)
