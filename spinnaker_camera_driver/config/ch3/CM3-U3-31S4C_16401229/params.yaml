@@ -1,4 +1,4 @@
-frame_rate: 5
+frame_rate: 10
 auto_exposure: True 
 exposure: 1.35
 auto_shutter: True
