@@ -370,7 +370,7 @@ void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& fr
             // 16 Bits per Pixel
             if (color_filter_str.compare(bayer_rg_str) == 0)
             {
-              imageEncoding = sensor_msgs::image_encodings::BAYER_RGGB16;
+              imageEncoding = sensor_msgs::image_encodings::BAYER_RGGB16;  // Coge este
             }
             else if (color_filter_str.compare(bayer_gr_str) == 0)
             {
@@ -436,13 +436,14 @@ void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& fr
         uint8_t* raw_data = (uint8_t*) image_ptr->GetData();
         //Flip if necessary (right camera is phisically rotated 180 degrees)
         if (flip==true){
-          imageEncoding = sensor_msgs::image_encodings::BAYER_BGGR16;
           for(int i = 0; i < (height*width); i++){
             size_t idx2  = (height*width*2)-i;
             uint8_t aux = raw_data[i];
             raw_data[i]=raw_data[idx2];
             raw_data[idx2]=aux;
           }
+          imageEncoding = sensor_msgs::image_encodings::BAYER_BGGR16;
+
         }else{
           for(int i = 0; i < (height*width); i++){
             size_t idx2  = (height*width*2)-i;
@@ -450,6 +451,7 @@ void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& fr
             raw_data[i]=raw_data[i];
             raw_data[idx2]=raw_data[idx2];
           }
+          imageEncoding = sensor_msgs::image_encodings::BAYER_RGGB16;
         }
        
 
