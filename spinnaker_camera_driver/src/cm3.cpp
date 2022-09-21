@@ -81,7 +81,7 @@ void Cm3::setNewConfiguration(const SpinnakerConfig& config, const uint32_t& lev
 
     setProperty(node_map_, "LineSelector", config.line_selector);
     setProperty(node_map_, "LineMode", config.line_mode);
-    // setProperty(node_map_, "LineSource", config.line_source); // Not available in CM3
+    setProperty(node_map_, "LineSource", config.line_source); // Not available in CM3
 
     // Set auto exposure
     setProperty(node_map_, "ExposureMode", config.exposure_mode);
