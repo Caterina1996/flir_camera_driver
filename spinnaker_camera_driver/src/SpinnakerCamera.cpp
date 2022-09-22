@@ -370,19 +370,19 @@ void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& fr
             // 16 Bits per Pixel
             if (color_filter_str.compare(bayer_rg_str) == 0)
             {
-              imageEncoding = sensor_msgs::image_encodings::BAYER_RGGB16;  // Coge este
+              imageEncoding = sensor_msgs::image_encodings::BAYER_RGGB16;  
             }
             else if (color_filter_str.compare(bayer_gr_str) == 0)
             {
-              imageEncoding = sensor_msgs::image_encodings::BAYER_GRBG16;
+              imageEncoding = sensor_msgs::image_encodings::BAYER_GRBG16; 
             }
             else if (color_filter_str.compare(bayer_gb_str) == 0)
             {
-              imageEncoding = sensor_msgs::image_encodings::BAYER_GBRG16;
+              imageEncoding = sensor_msgs::image_encodings::BAYER_GBRG16; 
             }
             else if (color_filter_str.compare(bayer_bg_str) == 0)
             {
-              imageEncoding = sensor_msgs::image_encodings::BAYER_BGGR16;
+              imageEncoding = sensor_msgs::image_encodings::BAYER_BGGR16; 
             }
             else
             {
@@ -394,19 +394,24 @@ void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& fr
             // 8 Bits per Pixel
             if (color_filter_str.compare(bayer_rg_str) == 0)
             {
-              imageEncoding = sensor_msgs::image_encodings::BAYER_RGGB8;
+              imageEncoding = sensor_msgs::image_encodings::BAYER_RGGB8; // Coge este
+              // ROS_INFO_STREAM("BAYER_RGGB8");
             }
             else if (color_filter_str.compare(bayer_gr_str) == 0)
             {
               imageEncoding = sensor_msgs::image_encodings::BAYER_GRBG8;
+              // ROS_INFO_STREAM("BAYER_GRBG8");
             }
             else if (color_filter_str.compare(bayer_gb_str) == 0)
             {
               imageEncoding = sensor_msgs::image_encodings::BAYER_GBRG8;
+              // ROS_INFO_STREAM("BAYER_GBRG8");
             }
             else if (color_filter_str.compare(bayer_bg_str) == 0)
             {
               imageEncoding = sensor_msgs::image_encodings::BAYER_BGGR8;
+              // ROS_INFO_STREAM("BAYER_BGGR8");
+              
             }
             else
             {
@@ -418,7 +423,7 @@ void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& fr
         {
           if (bitsPerPixel == 16)
           {
-            imageEncoding = sensor_msgs::image_encodings::MONO16;
+            imageEncoding = sensor_msgs::image_encodings::MONO16; 
           }
           else if (bitsPerPixel == 24)
           {
@@ -435,30 +440,28 @@ void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& fr
         int stride = image_ptr->GetStride();
         uint8_t* raw_data = (uint8_t*) image_ptr->GetData();
         //Flip if necessary (right camera is phisically rotated 180 degrees)
-        if (flip==true){
-          for(int i = 0; i < (height*width); i++){
-            size_t idx2  = (height*width*2)-i;
+        if (flip == true){
+          for(int i = 0; i < ((height * width) / 2); i++){
+            size_t idx2 = (height * width) - i;
             uint8_t aux = raw_data[i];
-            raw_data[i]=raw_data[idx2];
-            raw_data[idx2]=aux;
+            raw_data[i] = raw_data[idx2];
+            raw_data[idx2] = aux;           
           }
-          imageEncoding = sensor_msgs::image_encodings::BAYER_BGGR16;
-
+          imageEncoding = sensor_msgs::image_encodings::BAYER_GBRG8; 
         }else{
-          for(int i = 0; i < (height*width); i++){
-            size_t idx2  = (height*width*2)-i;
+          for(int i = 0; i < ((height * width) / 2); i++){
+            size_t idx2 = (height * width) - i;
             uint8_t aux = raw_data[i];
-            raw_data[i]=raw_data[i];
-            raw_data[idx2]=raw_data[idx2];
+            raw_data[i] = raw_data[i];
+            raw_data[idx2] = raw_data[idx2];
           }
-          imageEncoding = sensor_msgs::image_encodings::BAYER_RGGB16;
+          imageEncoding = sensor_msgs::image_encodings::BAYER_RGGB8; 
         }
-       
-
         // ROS_INFO_ONCE("\033[93m wxh: (%d, %d), stride: %d \n", width, height, stride);
+        // fillImage(*image, imageEncoding, height, width, stride, image_ptr->GetData());
         fillImage(*image, imageEncoding, height, width, stride, raw_data);
         image->header.frame_id = frame_id;
-      }  // end else
+      }  
     }
     catch (const Spinnaker::Exception& e)
     {

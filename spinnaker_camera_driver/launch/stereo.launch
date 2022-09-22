@@ -30,8 +30,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <!-- When unspecified, the driver will use the default framerate as given by the
       camera itself. Use the parameter 'control_frame_rate' to enable manual frame 
       rate control, and 'frame_rate' to set the frame rate value. -->
-  <arg name="control_frame_rate"        default="true" />
-  <arg name="frame_rate"                default="5" />
+      
   <!-- IDS girats -->
   <arg name="left_camera_serial"        default="16401228" />
   <arg name="right_camera_serial"       default="16401229" />
@@ -39,13 +38,13 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
   <!-- Nodelet manager -->
   <!-- Both cameras are not loaded into one nodelet manager to avoid the namespacing issue. -->
-  <node pkg="nodelet" type="nodelet" name="camera_nodelet_manager" args="manager" />
+  <node pkg="nodelet" type="nodelet" name="camera_nodelet_manager" args="manager" output="screen"/>
 
   <group ns="$(arg camera_name)" >
     <group ns="left" >
       <!-- Camera nodelet -->
       <node pkg="nodelet" type="nodelet" name="camera_nodelet"
-            args="load spinnaker_camera_driver/SpinnakerCameraNodelet /camera_nodelet_manager" >
+            args="load spinnaker_camera_driver/SpinnakerCameraNodelet /camera_nodelet_manager" output="screen">
         <param name="frame_id"                        value="camera_left" />
         <param name="serial"                          value="$(arg left_camera_serial)" />
         <param name="flip"                            value="true" />
@@ -69,7 +68,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     <group ns="right" >
       <!-- Camera nodelet -->
       <node pkg="nodelet" type="nodelet" name="camera_nodelet"
-            args="load spinnaker_camera_driver/SpinnakerCameraNodelet /camera_nodelet_manager" >
+            args="load spinnaker_camera_driver/SpinnakerCameraNodelet /camera_nodelet_manager" output="screen">
         <param name="frame_id"                        value="camera_right" />
         <param name="serial"                          value="$(arg right_camera_serial)" />
         <param name="flip"                            value="false" />
