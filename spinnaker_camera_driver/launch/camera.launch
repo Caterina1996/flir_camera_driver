@@ -26,10 +26,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
 <launch>
 
-  <arg name="camera_serial"         default="0" />
+  <arg name="camera_serial"         default="22416604" /> <!-- 16401229, 16401228-->
   <arg name="camera_flip"           default="false" />
   <arg name="camera_info_url"       default="0" />
-  <arg name="calibrated"            default="true" />
+  <arg name="calibrated"            default="false" />
   <arg name="frame_id"              default="stereo_ch3" />
   <!-- <arg name="control_frame_rate"    default="true" />
   <arg name="frame_rate"            default="3" /> -->
@@ -38,6 +38,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     <remap from="/diagnostics" to="/camera_diagnostics"/>  <!-- Topic logger fix don't touch-->
   </node>
 
+  <rosparam command="load" file="$(find spinnaker_camera_driver)/config/ch3/CM3-U3-31S4C_$(arg camera_serial)/params.yaml" ns="spinnaker_camera_nodelet"/>
   <node pkg="nodelet" type="nodelet" name="spinnaker_camera_nodelet" args="load spinnaker_camera_driver/SpinnakerCameraNodelet camera_nodelet_manager" > 
     <param name="frame_id"        value="$(arg frame_id)" />
     <param name="serial"          value="$(arg camera_serial)" />

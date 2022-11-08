@@ -370,19 +370,23 @@ void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& fr
             // 16 Bits per Pixel
             if (color_filter_str.compare(bayer_rg_str) == 0)
             {
-              imageEncoding = sensor_msgs::image_encodings::BAYER_RGGB16;  
+              imageEncoding = sensor_msgs::image_encodings::BAYER_RGGB16;
+              // ROS_INFO_STREAM("BAYER_RGGB16");  
             }
             else if (color_filter_str.compare(bayer_gr_str) == 0)
             {
               imageEncoding = sensor_msgs::image_encodings::BAYER_GRBG16; 
+              // ROS_INFO_STREAM("BAYER_GRBG16");  
             }
             else if (color_filter_str.compare(bayer_gb_str) == 0)
             {
               imageEncoding = sensor_msgs::image_encodings::BAYER_GBRG16; 
+              // ROS_INFO_STREAM("BAYER_GBRG16");  
             }
             else if (color_filter_str.compare(bayer_bg_str) == 0)
             {
               imageEncoding = sensor_msgs::image_encodings::BAYER_BGGR16; 
+              // ROS_INFO_STREAM("BAYER_BGGR16");  
             }
             else
             {
@@ -424,14 +428,17 @@ void SpinnakerCamera::grabImage(sensor_msgs::Image* image, const std::string& fr
           if (bitsPerPixel == 16)
           {
             imageEncoding = sensor_msgs::image_encodings::MONO16; 
+            // ROS_INFO_STREAM("MONO16");
           }
           else if (bitsPerPixel == 24)
           {
             imageEncoding = sensor_msgs::image_encodings::RGB8;
+            // ROS_INFO_STREAM("RGB8");
           }
           else
           {
             imageEncoding = sensor_msgs::image_encodings::MONO8;
+            // ROS_INFO_STREAM("MONO8");
           }
         }
 
