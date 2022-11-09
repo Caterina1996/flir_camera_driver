@@ -1,0 +1,21 @@
+image_width: 2048
+image_height: 1536
+# camera_name: stereo_ch3/right
+camera_name: 22416601
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [1450.336171, 0.000000, 993.239609, 0.000000, 1448.650847, 789.455714, 0.000000, 0.000000, 1.000000]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [0.025292, -0.008274, 0.000564, -0.002604, 0.000000]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [0.999085, -0.041157, -0.011602, 0.041150, 0.999153, -0.000824, 0.011627, 0.000346, 0.999932]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [1560.248884, 0.000000, 984.784866, -177.844997, 0.000000, 1560.248884, 785.888153, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000]
