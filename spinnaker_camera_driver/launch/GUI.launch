@@ -1,0 +1,12 @@
+<launch>
+    <include file="$(find spinnaker_camera_driver)/launch/stereo.launch">
+    </include>
+
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+    </include>
+
+    <rosparam command="load" file="$(find cola2_turbot)/config/topic_logger_plome.yaml"/>
+    <node pkg="cola2_turbot" type="topic_logger.py" name="bagfile_logger">
+        <param name="dir" value="/home/uib/Documentos/data"/>
+    </node>
+</launch>

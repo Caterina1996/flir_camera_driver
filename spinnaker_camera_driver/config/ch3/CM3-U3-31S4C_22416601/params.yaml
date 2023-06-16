@@ -21,12 +21,12 @@ image_format_color_coding: BayerRG8
 #image_format_color_coding: BayerRG8
 
 # EXPOSURE
-#exposure_mode: Timed
-#exposure_auto: Continuous
-#auto_exposure_time_upper_limit: 3500.0 # microseconds
-# exposure_time: 3000.0 # microseconds only if exposure auto is "On"
+exposure_mode: Timed
+exposure_auto: 'Off'
+#auto_exposure_time_upper_limit: 200000.0 # microseconds
+exposure_time: 20000.0 # microseconds only if exposure auto is "On"
 
 # GAIN
-#gain_selector: All
-#auto_gain: Continuous
-#gain: 0.0
+gain_selector: All
+auto_gain: 'Off'
+gain: 0.0
