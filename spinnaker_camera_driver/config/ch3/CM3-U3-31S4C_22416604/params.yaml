@@ -25,7 +25,7 @@ image_format_color_coding: BayerRG8
 exposure_mode: Timed
 exposure_auto: 'Off'
 #auto_exposure_time_upper_limit: 60000.0 # microseconds
-exposure_time: 240000.0 # microseconds
+exposure_time: 4500.0 # microseconds
 
 # GAIN
 gain_selector: All
