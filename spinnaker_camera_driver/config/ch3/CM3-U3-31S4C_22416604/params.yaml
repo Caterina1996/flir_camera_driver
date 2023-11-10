@@ -22,7 +22,3 @@ auto_exposure_time_upper_limit: 40000.0 # microseconds
 gain_selector: All
 auto_gain: 'Continuous'
 gain: 0.0
-
-
-
-
