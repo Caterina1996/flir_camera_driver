@@ -27,7 +27,6 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <!-- Common parameters -->
   <arg name="camera_name"                default="stereo_ch3" />
   <arg name="calibration"                default="air" />
-  <arg name="disparity_params"           default="$(find spinnaker_camera_driver)/config/ch3/disparity_params_x2.yaml"/>
   <arg name="enable_pc_voxel"            default="false"/>
   <arg name="enable_decimate_x1"         default="false"/>
   <arg name="enable_decimate_x2"         default="false"/>
@@ -76,7 +75,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     <!-- Stereo image processing nodelet -->
     <group if="$(arg enable_decimate_x1)">
       <node pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" respawn="true" output="screen">
-        <rosparam file="$(arg disparity_params)"/>
+        <rosparam file="$(find spinnaker_camera_driver)/config/ch3/disparity_params_x1.yaml"/>
         <param name="approximate_sync" value="true"/>
       </node>
     </group>
@@ -91,7 +90,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     </include>
       <group ns="$(arg camera_name)/scaled_x2" >
         <node pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" respawn="true" output="screen">
-          <rosparam file="$(arg disparity_params)"/>
+          <rosparam file="$(find spinnaker_camera_driver)/config/ch3/disparity_params_x2.yaml"/>
           <param name="approximate_sync" value="true" />
         </node>
       </group>
@@ -106,7 +105,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     </include>
       <group ns="$(arg camera_name)/scaled_x4" >
         <node pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" respawn="true" output="screen">
-          <rosparam file="$(arg disparity_params)"/>
+          <rosparam file="$(find spinnaker_camera_driver)/config/ch3/disparity_params_x4.yaml"/>
           <param name="approximate_sync" value="true" />
         </node>
       </group>
