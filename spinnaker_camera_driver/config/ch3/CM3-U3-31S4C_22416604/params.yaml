@@ -22,7 +22,3 @@ exposure_time: 20000.0 #4500.0 # microseconds
 gain_selector: All
 auto_gain: 'Off' #'Continuous'
 gain: 5.0
-
-
-
-
