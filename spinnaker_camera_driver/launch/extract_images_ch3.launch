@@ -27,8 +27,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <!-- Common parameters -->
   <arg name="camera_name"                default="stereo_ch3" />
   <arg name="calibration"                default="water" />
-  <arg name="disparity_params"           default="$(find spinnaker_camera_driver)/config/ch3/disparity_params_x1.yaml"/>
-  <arg name="enable_decimate_x1"         default="false"/>
+  <arg name="disparity_params"           default="$(find spinnaker_camera_driver)/config/ch3/disparity_params_x2.yaml"/>
+  <arg name="enable_decimate_x1"         default="true"/>
   <arg name="enable_decimate_x2"         default="true"/>
   <arg name="enable_decimate_x4"         default="false"/>
 
@@ -42,13 +42,15 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <!-- images extraction -->
   <arg name="image" default="image_rect_color" />
   <!-- <arg name="out_dir"         default="/home/uib/PLOME/datasets/Andratx_28_06_2023/13_55/"/> -->
-  <arg name="out_dir"         default="/home/uib/DATA/PEIXOS/LANDER_UIB/Andratx_28_06_2023/14_09/"/>
+  <!-- <arg name="out_dir"         default="/home/uib/DATA/PEIXOS/LANDER_UIB/Andratx_28_06_2023/14_09/"/> -->
+  <arg name="out_dir"         default="/home/uib/PLOME/test_stereo/"/>
   <arg name="format" default="frame%06i.png" />
   <arg name="sec_per_frame" default="0.0" />
 
 
 
-  <arg name="bagfile" default="/media/uib/My\ Passport/bagfiles/PLOMENUC/2023-06-28-14-09-27.bag"/> -->
+  <!-- <arg name="bagfile" default="/home/uib/bagfiles/PLOME/pool_plastic_fish/14_21_26/stereo_camera_images_2023-07-18-14-21-26_0.bag"/> --> -->
+  <arg name="bagfile" default="/home/uib/bagfiles/PLOME/data_peixos_andratx_MARCO/plome_camera/11_48_16/stereo_camera_images_2023-06-15-11-48-16_0.bag"/> -->
 
   <!-- playback the data -->
   <node pkg="rosbag" type="play" name="player" args="-d 1 -r $(arg rate) $(arg bagfile)" required="true" />
@@ -56,18 +58,23 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <!-- grab images to disk -->
   <node pkg="image_view" type="extract_images" name="extractor_left" output="screen" >
     <!-- <remap from="image" to="$(arg camera_name)/left/$(arg image)" /> -->
-    <remap from="image" to="/stereo_ch3/scaled_x2/left/image_rect_color" />
+    <remap from="image" to="$(arg camera_name)/left/image_rect_color/compressed" />
+    <!-- <remap from="image" to="$(arg camera_name)/left/$(arg image)" /> -->
+    <!-- <remap from="image" to="/stereo_ch3/scaled_x4/left/image_rect_color" /> -->
+    <!-- <remap from="image" to="/stereo_ch3/left/image_rect_color" /> -->
 
     <param name="filename_format" value="$(arg out_dir)/left_$(arg format)" />
     <!-- only grab image if sec_per_frame passed between two images -->
     <param name="sec_per_frame" value="$(arg sec_per_frame)" />
   </node>
-<!--
+
   <node pkg="image_view" type="extract_images" name="extractor_right" output="screen" >
     <param name="filename_format" value="$(arg out_dir)/right_$(arg format)" />
-    <remap from="image" to="/stereo_ch3/scaled_x2/right/image_rect_color" />
+    <!-- <remap from="image" to="/stereo_ch3/right/image_rect_color" /> -->
+    <remap from="image" to="/stereo_ch3/right/image_rect_color/compressed" />
+    <!-- <remap from="image" to="/stereo_ch3/scaled_x4/right/image_rect_color" /> -->
     <param name="sec_per_frame" value="$(arg sec_per_frame)" />
-  </node> -->
+  </node>
 
   <!-- Nodelet manager -->
   <!-- Both cameras are not loaded into one nodelet manager to avoid the namespacing issue. -->
@@ -114,7 +121,6 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
         </group>
     </group>
 
-
     <!-- x4 decimate -->
     <group if="$(arg enable_decimate_x4)">
       <include file="$(find spinnaker_camera_driver)/launch/stereo_crop_decimate.launch" >
@@ -122,12 +128,15 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
         <arg name="decimation" value="4" />
         <arg name="launch_in_nuc" value="false" />
       </include>
-        <group ns="(arg camera_name)/scaled_x4" >
+        <group ns="$(arg camera_name)/scaled_x4" >
           <node pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" respawn="true" output="screen">
             <rosparam file="$(arg disparity_params)"/>
             <param name="approximate_sync" value="true" />
           </node>
         </group>
     </group>
+
+
+
 
 </launch>
