@@ -43,25 +43,25 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <arg name="image" default="image_rect_color" />
   <!-- <arg name="out_dir"         default="/home/uib/PLOME/datasets/Andratx_28_06_2023/13_55/"/> -->
   <!-- <arg name="out_dir"         default="/home/uib/DATA/PEIXOS/LANDER_UIB/Andratx_28_06_2023/14_09/"/> -->
-  <arg name="out_dir"         default="/home/uib/PLOME/test_stereo/"/>
+  <arg name="out_dir"         default="//home/uib/bagfiles/PLOME/Andratx_28_06_2023/images/"/>
   <arg name="format" default="frame%06i.png" />
   <arg name="sec_per_frame" default="0.0" />
 
 
 
   <!-- <arg name="bagfile" default="/home/uib/bagfiles/PLOME/pool_plastic_fish/14_21_26/stereo_camera_images_2023-07-18-14-21-26_0.bag"/> --> -->
-  <arg name="bagfile" default="/home/uib/bagfiles/PLOME/data_peixos_andratx_MARCO/plome_camera/11_48_16/stereo_camera_images_2023-06-15-11-48-16_0.bag"/> -->
-
+  <!-- <arg name="bagfile" default="/home/uib/bagfiles/PLOME/bendinat_15_11/12_32_40/stereo_camera_images_2023-11-15-12-32-40_0.bag"/> --> -->
+  <arg name="bagfile" default="/home/uib/bagfiles/PLOME/Andratx_28_06_2023/2023-06-28-13-55-49.bag"/> -->
   <!-- playback the data -->
-  <node pkg="rosbag" type="play" name="player" args="-d 1 -r $(arg rate) $(arg bagfile)" required="true" />
+  <node pkg="rosbag" type="play" name="player" args="-d 1 -r $(arg rate) -s 40 $(arg bagfile)" required="true" />
 
   <!-- grab images to disk -->
   <node pkg="image_view" type="extract_images" name="extractor_left" output="screen" >
     <!-- <remap from="image" to="$(arg camera_name)/left/$(arg image)" /> -->
-    <remap from="image" to="$(arg camera_name)/left/image_rect_color/compressed" />
+    <!-- <remap from="image" to="$(arg camera_name)/left/image_rect_color/compressed" /> -->
     <!-- <remap from="image" to="$(arg camera_name)/left/$(arg image)" /> -->
-    <!-- <remap from="image" to="/stereo_ch3/scaled_x4/left/image_rect_color" /> -->
-    <!-- <remap from="image" to="/stereo_ch3/left/image_rect_color" /> -->
+    <!-- <remap from="image" to="/stereo_ch3/scaled_x2/left/image_rect_color" /> -->
+    <remap from="image" to="/stereo_ch3/left/image_rect_color" />
 
     <param name="filename_format" value="$(arg out_dir)/left_$(arg format)" />
     <!-- only grab image if sec_per_frame passed between two images -->
@@ -70,9 +70,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
   <node pkg="image_view" type="extract_images" name="extractor_right" output="screen" >
     <param name="filename_format" value="$(arg out_dir)/right_$(arg format)" />
-    <!-- <remap from="image" to="/stereo_ch3/right/image_rect_color" /> -->
-    <remap from="image" to="/stereo_ch3/right/image_rect_color/compressed" />
-    <!-- <remap from="image" to="/stereo_ch3/scaled_x4/right/image_rect_color" /> -->
+    <remap from="image" to="/stereo_ch3/right/image_rect_color" />
+    <!-- <remap from="image" to="/stereo_ch3/right/image_rect_color/compressed" /> -->
+    <!-- <remap from="image" to="/stereo_ch3/scaled_x2/right/image_rect_color" /> -->
     <param name="sec_per_frame" value="$(arg sec_per_frame)" />
   </node>
 
