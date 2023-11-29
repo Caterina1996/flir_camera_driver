@@ -26,7 +26,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 <launch>
   <!-- Common parameters -->
   <arg name="camera_name"                default="stereo_ch3" />
-  <arg name="calibration"                default="water" />
+  <arg name="calibration"                default="pool" />
   <arg name="disparity_params"           default="$(find spinnaker_camera_driver)/config/ch3/disparity_params_x2.yaml"/>
   <arg name="enable_decimate_x1"         default="true"/>
   <arg name="enable_decimate_x2"         default="true"/>
@@ -37,63 +37,51 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <!-- IDS -->
   <arg name="left_camera_serial"         default="22416604" /> <!-- MASTER (also 16401228)-->
   <arg name="right_camera_serial"        default="22416601" /> <!-- SLAVE (also 16401229)-->
-  <arg name="rate" default="0.1 " />
+  <arg name="rate" default="1 " />
 
   <!-- images extraction -->
   <arg name="image" default="image_rect_color" />
-  <!-- <arg name="out_dir"         default="/home/uib/PLOME/datasets/Andratx_28_06_2023/13_55/"/> -->
-  <!-- <arg name="out_dir"         default="/home/uib/DATA/PEIXOS/LANDER_UIB/Andratx_28_06_2023/14_09/"/> -->
-  <arg name="out_dir"         default="/home/uib/PLOME/test_stereo/"/>
+  <arg name="out_dir"         default="/home/uib/PLOME/plome_ws/src/stereo_plome/extracted_images/Andratx_2023-10-11__12-57-42_5/"/>
   <arg name="format" default="frame%06i.png" />
   <arg name="sec_per_frame" default="0.0" />
 
   <!-- Set the timestamp parameter to the current time -->
   <!-- <param name="timestamp" command="date +%Y%m%d%H%M%S" /> -->
 
-  <!-- <arg name="bagfile" default="/home/uib/bagfiles/PLOME/pool_plastic_fish/14_21_26/stereo_camera_images_2023-07-18-14-21-26_0.bag"/> --> -->
-  <arg name="bagfile" default="/home/uib/bagfiles/PLOME/pool_plastic_fish/2023_10_03/12_22_29/stereo_camera_images_2023-10-03-12-22-29_0.bag"/> -->
+  <arg name="bagfile" default="/home/uib/bagfiles/PLOME/Andratx_10_11_2023/stereo_camera_images_2023-10-11-12-57-42_5.bag"/> -->
 
   <!-- playback the data -->
   <node pkg="rosbag" type="play" name="player" args="-d 1 -r $(arg rate) $(arg bagfile)" required="true" output="screen">
-    <!-- Add the launch-prefix to extract the timestamp -->
-    <!-- <param name="launch-prefix" value="rosparam set /timestamp $msg.header.stamp.to_sec())" /> -->
+
   </node>
 
   <!-- grab images to disk -->
   <node pkg="image_view" type="extract_images" name="extractor_left" output="screen" >
     <!-- <remap from="image" to="$(arg camera_name)/left/$(arg image)" /> -->
-    <!-- <remap from="image" to="$(arg camera_name)/left/image_rect_color/compressed" /> -->
-    <!-- <remap from="image" to="$(arg camera_name)/left/$(arg image)" /> -->
     <remap from="image" to="/stereo_ch3/scaled_x2/left/image_rect_color" />
     <!-- <remap from="image" to="/stereo_ch3/left/image_rect_color" /> -->
 
-    <param name="filename_format" value="$(arg out_dir)/$(arg format)_left" />
-    <!-- <param name="filename_format" value="$(arg out_dir)/$(arg timestamp)_left_$(arg format)" /> -->
+    <param name="filename_format" value="$(arg out_dir)/left_$(arg format)" />
     <!-- only grab image if sec_per_frame passed between two images -->
     <param name="sec_per_frame" value="$(arg sec_per_frame)" />
   </node>
 
   <node pkg="image_view" type="extract_images" name="extractor_right" output="screen" >
-    <param name="filename_format" value="$(arg out_dir)/$(arg format)_right" />
+    <param name="filename_format" value="$(arg out_dir)/right_$(arg format)" />
     <!-- <remap from="image" to="/stereo_ch3/right/image_rect_color" /> -->
     <!-- <remap from="image" to="/stereo_ch3/right/image_rect_color/compressed" /> -->
     <remap from="image" to="/stereo_ch3/scaled_x2/right/image_rect_color" />
-    <!-- <param name="filename_format" value="$(arg out_dir)/$(arg timestamp)_right_$(arg format)" /> -->
-    <param name="sec_per_frame" value="$(arg sec_per_frame)" />
-  </node>
-
-  <node pkg="image_view" type="extract_images" name="extractor_disp" output="screen" >
-    <param name="filename_format" value="$(arg out_dir)/$(arg format)_disp" />
-    <!-- <remap from="image" to="/stereo_ch3/right/image_rect_color" /> -->
-    <!-- <remap from="image" to="/stereo_ch3/right/image_rect_color/compressed" /> -->
-    <remap from="image" to="/stereo_ch3/scaled_x2/disparity/image" />
-    <!-- <param name="filename_format" value="$(arg out_dir)/$(arg timestamp)_right_$(arg format)" /> -->
     <param name="sec_per_frame" value="$(arg sec_per_frame)" />
   </node>
 
   <!-- Nodelet manager -->
   <!-- Both cameras are not loaded into one nodelet manager to avoid the namespacing issue. -->
   <node pkg="nodelet" type="nodelet" name="camera_nodelet_manager" args="manager" output="screen"/>
+
+  <!-- disparity_saver.launch -->
+  <node name="disparity_saver_node" pkg="stereo_plome" type="disparity_saver.py" output="screen">
+    <param name="output_folder" type="string" value="$(arg out_dir)"/>
+  </node>
 
   <group ns="$(arg camera_name)" >
     <group ns="left" >
@@ -150,8 +138,6 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
           </node>
         </group>
     </group>
-
-
 
 
 </launch>
