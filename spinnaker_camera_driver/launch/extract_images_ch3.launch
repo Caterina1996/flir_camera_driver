@@ -29,7 +29,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <arg name="calibration"                default="water" />
   <arg name="disparity_params"           default="$(find spinnaker_camera_driver)/config/ch3/disparity_params_x2.yaml"/>
   <arg name="enable_decimate_x1"         default="true"/>
-  <arg name="enable_decimate_x2"         default="true"/>
+  <arg name="enable_decimate_x2"         default="false"/>
   <arg name="enable_decimate_x4"         default="false"/>
 
   <param name="/use_sim_time"            value="true"/>
@@ -37,36 +37,36 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <!-- IDS -->
   <arg name="left_camera_serial"         default="22416604" /> <!-- MASTER (also 16401228)-->
   <arg name="right_camera_serial"        default="22416601" /> <!-- SLAVE (also 16401229)-->
-  <arg name="rate" default="0.1 " />
+  <arg name="rate" default="2" />
 
   <!-- images extraction -->
   <arg name="image" default="image_rect_color" />
   <!-- <arg name="out_dir"         default="/home/uib/PLOME/datasets/Andratx_28_06_2023/13_55/"/> -->
   <!-- <arg name="out_dir"         default="/home/uib/DATA/PEIXOS/LANDER_UIB/Andratx_28_06_2023/14_09/"/> -->
-  <arg name="out_dir"         default="//home/uib/bagfiles/PLOME/Andratx_28_06_2023/images/"/>
-  <arg name="format" default="frame%06i.png" />
+  <arg name="out_dir"         default="/home/uib/DATA/PEIXOS/LANTY/train_plastic_objects_images/"/>
+  <arg name="format" default="9frame%06i.png" />
   <arg name="sec_per_frame" default="0.0" />
 
 
 
-  <!-- <arg name="bagfile" default="/home/uib/bagfiles/PLOME/pool_plastic_fish/14_21_26/stereo_camera_images_2023-07-18-14-21-26_0.bag"/> --> -->
-  <!-- <arg name="bagfile" default="/home/uib/bagfiles/PLOME/bendinat_15_11/12_32_40/stereo_camera_images_2023-11-15-12-32-40_0.bag"/> --> -->
-  <arg name="bagfile" default="/home/uib/bagfiles/PLOME/Andratx_28_06_2023/2023-06-28-13-55-49.bag"/> -->
+  <!-- <arg name="bagfile" default="/home/uib/bagfiles/PLOME/pool_plastic_fish/14_21_26/stereo_camera_images_2023-07-18-14-21-26_0.bag"/> -->
+  <!-- <arg name="bagfile" default="/home/uib/bagfiles/PLOME/bendinat_15_11/12_32_40/stereo_camera_images_2023-11-15-12-32-40_0.bag"/> -->
+  <arg name="bagfile" default="/home/uib/bagfiles/PLOME/Pool_calamardo/stereo_camera_images_2023-11-20-13-57-38_1.bag"/>
   <!-- playback the data -->
   <node pkg="rosbag" type="play" name="player" args="-d 1 -r $(arg rate) -s 40 $(arg bagfile)" required="true" />
 
   <!-- grab images to disk -->
-  <node pkg="image_view" type="extract_images" name="extractor_left" output="screen" >
+  <!-- <node pkg="image_view" type="extract_images" name="extractor_left" output="screen" > -->
     <!-- <remap from="image" to="$(arg camera_name)/left/$(arg image)" /> -->
     <!-- <remap from="image" to="$(arg camera_name)/left/image_rect_color/compressed" /> -->
     <!-- <remap from="image" to="$(arg camera_name)/left/$(arg image)" /> -->
     <!-- <remap from="image" to="/stereo_ch3/scaled_x2/left/image_rect_color" /> -->
-    <remap from="image" to="/stereo_ch3/left/image_rect_color" />
+    <!-- <remap from="image" to="/stereo_ch3/left/image_rect_color" /> -->
 
-    <param name="filename_format" value="$(arg out_dir)/left_$(arg format)" />
+    <!-- <param name="filename_format" value="$(arg out_dir)/left_$(arg format)" /> -->
     <!-- only grab image if sec_per_frame passed between two images -->
-    <param name="sec_per_frame" value="$(arg sec_per_frame)" />
-  </node>
+    <!-- <param name="sec_per_frame" value="$(arg sec_per_frame)" />
+  </node> -->
 
   <node pkg="image_view" type="extract_images" name="extractor_right" output="screen" >
     <param name="filename_format" value="$(arg out_dir)/right_$(arg format)" />

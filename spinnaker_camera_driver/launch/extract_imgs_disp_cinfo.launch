@@ -45,6 +45,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <arg name="format" default="frame%06i.png" />
   <arg name="sec_per_frame" default="0.0" />
 
+
+	<arg name="node_name" default="inference_yolov8" />
+	<arg name="robot_name" default="stereo_ch3" />
+
   <!-- Set the timestamp parameter to the current time -->
   <!-- <param name="timestamp" command="date +%Y%m%d%H%M%S" /> -->
 
@@ -87,7 +91,6 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     <group ns="left" >
       <!-- Camera nodelet -->
       <rosparam command="load" file="$(find spinnaker_camera_driver)/config/ch3/CM3-U3-31S4C_$(arg left_camera_serial)/params.yaml" ns="camera_nodelet"/>
-
 
       <!-- Debayering nodelet -->
       <node pkg="nodelet" type="nodelet" name="image_proc_debayer" args="load image_proc/debayer /camera_nodelet_manager"/>
@@ -138,6 +141,15 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
           </node>
         </group>
     </group>
+
+	<!-- <rosparam command="load" file="$(find stereo_plome)//config/model_r0.yaml"/>
+	<node name= "$(arg node_name)" pkg="stereo_plome" type="yolov8_IS_inference.py" output="screen">
+		<param name="robot_name" value="$(arg robot_name)"/>
+		<remap from="image_rect_color" to="/$(arg robot_name)/left/image_color"/>
+        <remap from="camera_info" to="/$(arg robot_name)/left/camera_info"/>
+
+		<remap from="navigator/navigation" to="/$(arg robot_name)/navigator/navigation"/>
+	</node> -->
 
 
 </launch>
