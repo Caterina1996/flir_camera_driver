@@ -30,7 +30,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <arg name="disparity_params"           default="$(find spinnaker_camera_driver)/config/ch3/disparity_params_x2.yaml"/>
   <arg name="enable_decimate_x1"         default="true"/>
   <arg name="enable_decimate_x2"         default="true"/>
-  <arg name="enable_decimate_x4"         default="false"/>
+  <arg name="enable_decimate_x4"         default="true"/>
 
   <param name="/use_sim_time"            value="true"/>
 
@@ -51,7 +51,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <!-- <param name="timestamp" command="date +%Y%m%d%H%M%S" /> -->
 
   <!-- <arg name="bagfile" default="/home/uib/bagfiles/PLOME/pool_plastic_fish/14_21_26/stereo_camera_images_2023-07-18-14-21-26_0.bag"/> --> -->
-  <arg name="bagfile" default="/home/plomenuc/Bagfiles/Andratx_28_06_2023/2023-06-28-12-00-07.bag"/> -->
+  <arg name="bagfile" default="/home/uib/bagfiles/PLOME/pool_plastic_fish/14_21_26/stereo_camera_images_2023-07-18-14-21-26_0.bag"/>
 
   <!-- playback the data -->
   <node pkg="rosbag" type="play" name="player" args="-d 1 -l -r $(arg rate) $(arg bagfile)" required="true" output="screen">
@@ -84,10 +84,14 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
      <!-- x2 decimate -->
     <group if="$(arg enable_decimate_x2)">
-
+      <include file="$(find spinnaker_camera_driver)/launch/stereo_crop_decimate.launch" >
+        <arg name="stereo" value="$(arg camera_name)" />
+        <arg name="decimation" value="2" />
+        <arg name="launch_in_nuc" value="false" />
+      </include>
         <group ns="$(arg camera_name)/scaled_x2" >
           <node pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" respawn="true" output="screen">
-            <rosparam file="$(arg disparity_params)"/>
+            <rosparam file="$(find spinnaker_camera_driver)/config/ch3/disparity_params_x2.yaml"/>
             <param name="approximate_sync" value="true" />
           </node>
         </group>
@@ -95,9 +99,14 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
     <!-- x4 decimate -->
     <group if="$(arg enable_decimate_x4)">
+      <include file="$(find spinnaker_camera_driver)/launch/stereo_crop_decimate.launch" >
+        <arg name="stereo" value="$(arg camera_name)" />
+        <arg name="decimation" value="4" />
+        <arg name="launch_in_nuc" value="false" />
+      </include>
         <group ns="$(arg camera_name)/scaled_x4" >
           <node pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" respawn="true" output="screen">
-            <rosparam file="$(arg disparity_params)"/>
+            <rosparam file="$(find spinnaker_camera_driver)/config/ch3/disparity_params_x4.yaml"/>
             <param name="approximate_sync" value="true" />
           </node>
         </group>
