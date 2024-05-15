@@ -3,7 +3,7 @@ acquisition_frame_rate_enable: true
 auto_gain: 'Off'
 exposure_auto: 'Off'
 exposure_mode: Timed
-exposure_time: 40000.0
+exposure_time: 50000
 gain: 5.0
 gain_selector: All
 image_format_color_coding: BayerRG8
