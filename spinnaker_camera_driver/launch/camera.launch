@@ -26,7 +26,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
 <launch>
 
-  <arg name="camera_serial"         default="22416604" /> <!-- 16401229, 16401228-->
+  <arg name="camera_serial"         default="23045884" /> <!-- 16401229, 16401228-->
   <arg name="camera_flip"           default="false" />
   <arg name="camera_info_url"       default="0" />
   <arg name="calibrated"            default="false" />
