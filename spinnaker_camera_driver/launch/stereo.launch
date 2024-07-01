@@ -28,13 +28,14 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <arg name="frame_id"                   default="girona500/stereo_down"/>
   <arg name="camera_name"                default="stereo_ch3" />
   <arg name="calibration"                default="water" />
+  <arg name="enable_pc_voxel"            default="true"/>
+  <arg name="enable_decimate_x1"         default="false"/>
+  <arg name="enable_decimate_x2"         default="false"/>
+  <arg name="enable_decimate_x4"         default="true"/>
 
   <!-- IDS -->
   <arg name="left_camera_serial"         default="23045884" /> <!-- MASTER (also 16401228)-->
   <arg name="right_camera_serial"        default="23045887" /> <!-- SLAVE (also 16401229)-->
-
-
-  <arg name="run_stereo_image_proc"      default="true" />
 
   <!-- Nodelet manager -->
   <!-- Both cameras are not loaded into one nodelet manager to avoid the namespacing issue. -->
@@ -70,11 +71,47 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     </group>
 
     <!-- Stereo image processing nodelet -->
-    <group if="$(arg run_stereo_image_proc)" >
-      <node pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc">
+    <group if="$(arg enable_decimate_x1)">
+      <node pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" respawn="true" output="screen">
+        <rosparam file="$(find spinnaker_camera_driver)/config/ch3/disparity_params_x1.yaml"/>
         <param name="approximate_sync" value="true"/>
       </node>
     </group>
+
+  <!-- x2 decimate -->
+  <group if="$(arg enable_decimate_x2)">
+    <include file="$(find spinnaker_camera_driver)/launch/stereo_crop_decimate.launch" >
+      <arg name="stereo" value="$(arg camera_name)" />
+      <arg name="decimation" value="2" />
+    </include>
+      <group ns="scaled_x2" >
+        <node pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" respawn="true" output="screen">
+          <rosparam file="$(find spinnaker_camera_driver)/config/ch3/disparity_params_x2.yaml"/>
+          <param name="approximate_sync" value="true" />
+        </node>
+      </group>
+  </group>
+
+  <!-- x4 decimate -->
+  <group if="$(arg enable_decimate_x4)">
+    <include file="$(find spinnaker_camera_driver)/launch/stereo_crop_decimate.launch" >
+      <arg name="stereo" value="$(arg camera_name)" />
+      <arg name="decimation" value="4" />
+    </include>
+      <group ns="scaled_x4" >
+        <node pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" respawn="true" output="screen">
+          <rosparam file="$(find spinnaker_camera_driver)/config/ch3/disparity_params_x4.yaml"/>
+          <param name="approximate_sync" value="true" />
+        </node>
+      </group>
+  </group>
+
+  <!-- Pointcloud voxel grid -->
+  <group if="$(arg enable_pc_voxel)">
+    <include file="$(find spinnaker_camera_driver)/launch/pc_voxel.launch">
+      <arg name="camera" value="$(arg camera_name)"/>
+    </include>
+  </group>
 
   </group>
 </launch>
