@@ -112,10 +112,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   </group>
 
   <!-- Pointcloud voxel grid -->
-  <group if="$(arg enable_pc_voxel)">
+  <!-- <group if="$(arg enable_pc_voxel)">
     <include file="$(find spinnaker_camera_driver)/launch/pc_voxel.launch">
       <arg name="camera" value="$(arg camera_name)"/>
     </include>
-  </group>
+  </group> -->
 
 </launch>
