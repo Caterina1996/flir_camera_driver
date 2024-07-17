@@ -1,0 +1,24 @@
+#STEREO CH3 SLAVE CONFIG DEEP SEA
+
+# # ACQUISITION CONTROL
+trigger_source: Line3
+trigger_overlap_mode: ReadOut
+trigger_selector: FrameStart
+enable_trigger: "On"
+
+# # IMAGE FORMAT CONTROL
+image_format_color_coding: BayerRG8
+
+# EXPOSURE
+exposure_mode: Timed
+exposure_auto: 'Off' #'Continuous'
+#auto_exposure_time_upper_limit: 20000.0 # microseconds
+exposure_time: 30000.0 #4500.0 # microseconds
+
+# GAIN
+gain_selector: All
+auto_gain: 'Off' #'Continuous'
+gain: 10.0
+
+# White Balance
+auto_white_balance: Continuous
