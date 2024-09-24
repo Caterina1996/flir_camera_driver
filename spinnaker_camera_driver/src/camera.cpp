@@ -231,6 +231,9 @@ void Camera::setImageControlFormats(const spinnaker_camera_driver::SpinnakerConf
 
   // Set Pixel Format
   setProperty(node_map_, "PixelFormat", config.image_format_color_coding);
+
+  // Set ISP Enable
+  setProperty(node_map_, "IspEnable", config.isp_enable);
 }
 
 void Camera::setGain(const float& gain)
@@ -314,6 +317,12 @@ Spinnaker::GenApi::CNodePtr Camera::readProperty(const Spinnaker::GenICam::gcstr
     throw std::runtime_error("Unable to get parmeter " + property_name);
   }
   return ptr;
+}
+
+bool Camera::readableProperty(const Spinnaker::GenICam::gcstring property_name)
+{
+  Spinnaker::GenApi::CNodePtr ptr = node_map_->GetNode(property_name);
+  return Spinnaker::GenApi::IsAvailable(ptr) && Spinnaker::GenApi::IsReadable(ptr);
 }
 
 Camera::Camera(Spinnaker::GenApi::INodeMap* node_map)
