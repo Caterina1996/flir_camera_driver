@@ -32,41 +32,86 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <arg name="left_camera_serial"         default="22416604" /> <!-- MASTER (also 16401228)-->
   <arg name="right_camera_serial"        default="22416601" /> <!-- SLAVE (also 16401229)-->
 
+  <arg name="calibrated"                default="true" />
+  <arg name="device_type"               default="USB3" /> <!-- USB3 or GigE -->
+  <arg name="frame_id"                  default="Lanty_1" />
+
+  <arg name="control_frame_rate"        default="true" />
+  <arg name="frame_rate"                default="8" />
 
   <arg name="run_stereo_image_proc"      default="true" />
   <arg name="params_file"                default="params_dynamic.yaml" />
+
+  <!-- Disabling ISP will dramatically increase frame-rate. However, it can only be 
+      disabled when using Bayer encoding (e.g. BayerRG8)-->
+  <arg name="isp_enable"                default="False" /> 
+  <arg name="encoding"                  default="BayerRG8" />
+  <arg name="color_balance"             default="Continuous" /> <!-- Off, Once, or Continuous -->
+  <!-- Available Encodings:
+        Mono:              YUV:              YCbCr:          Other:
+        - Mono8            - YUV411Packed    - YCbCr8        - BGR8
+        - Mono16           - YUV422Packed    - YCbCr422_8    - BGRa8
+        - Mono12p          - YUV444Packed    - YCbCr411_8    - RGB8Packed
+        - Mono12Packed
+
+        Bayer:
+        - BayerGR8         - BayerGR12p
+        - BayerRG8         - BayerRG12p
+        - BayerGB8         - BayerGB12p
+        - BayerBG8         - BayerBG12p
+        - BayerGR16        - BayerGR12Packed
+        - BayerRG16        - BayerRG12Packed
+        - BayerGB16        - BayerGB12Packed
+        - BayerBG16        - BayerBG12Packed
+  -->
+
 
   <!-- Nodelet manager -->
   <!-- Both cameras are not loaded into one nodelet manager to avoid the namespacing issue. -->
   <node pkg="nodelet" type="nodelet" name="camera_nodelet_manager" args="manager" output="screen"/>
 
   <group ns="$(arg camera_name)" >
+
     <group ns="left" >
       <!-- Camera nodelet -->
-      <rosparam command="load" file="$(find spinnaker_camera_driver)/config/ch3/CM3-U3-31S4C_$(arg left_camera_serial)/$(arg params_file)" ns="camera_nodelet"/>
-      <node pkg="nodelet" type="nodelet" name="camera_nodelet" args="load spinnaker_camera_driver/SpinnakerCameraNodelet /camera_nodelet_manager" output="screen">
-        <param name="frame_id"           value="camera_left" />
-        <param name="serial"             value="$(arg left_camera_serial)" />
-        <param name="flip"               value="true" />
+      <node pkg="nodelet" type="nodelet" name="camera_nodelet"
+            args="load spinnaker_camera_driver/SpinnakerCameraNodelet /camera_nodelet_manager" output="screen">
+        <param name="frame_id"                        value="camera_left" />
+        <param name="serial"                          value="$(arg left_camera_serial)" />
+
+        <!-- Frame rate -->
+        <param name="acquisition_frame_rate_enable"   value="$(arg control_frame_rate)" />
+        <param name="acquisition_frame_rate"          value="$(arg frame_rate)" />
+
         <param name="camera_info_url"    value="file://$(find spinnaker_camera_driver)/config/ch3/CM3-U3-31S4C_$(arg left_camera_serial)/$(arg calibration)" />
+         <!-- Debayering nodelet -->
       </node>
 
       <!-- Debayering nodelet -->
-      <node pkg="nodelet" type="nodelet" name="image_proc_debayer" args="load image_proc/debayer /camera_nodelet_manager"/>
+      <node pkg="nodelet" type="nodelet" name="image_proc_debayer"
+          args="load image_proc/debayer /camera_nodelet_manager">
+      </node>
     </group>
 
     <group ns="right" >
       <!-- Camera nodelet -->
-      <rosparam command="load" file="$(find spinnaker_camera_driver)/config/ch3/CM3-U3-31S4C_$(arg right_camera_serial)/$(arg params_file)" ns="camera_nodelet"/>
-      <node pkg="nodelet" type="nodelet" name="camera_nodelet" args="load spinnaker_camera_driver/SpinnakerCameraNodelet /camera_nodelet_manager" output="screen">
-        <param name="frame_id"           value="camera_right" />
-        <param name="serial"             value="$(arg right_camera_serial)" />
-        <param name="flip"               value="false" />
+      <node pkg="nodelet" type="nodelet" name="camera_nodelet"
+            args="load spinnaker_camera_driver/SpinnakerCameraNodelet /camera_nodelet_manager" output="screen">
+        <param name="frame_id"                        value="camera_left" />
+        <param name="serial"                          value="$(arg right_camera_serial)" />
+
+        <!-- Frame rate -->
+        <param name="acquisition_frame_rate_enable"   value="$(arg control_frame_rate)" />
+        <param name="acquisition_frame_rate"          value="$(arg frame_rate)" />
+
         <param name="camera_info_url"    value="file://$(find spinnaker_camera_driver)/config/ch3/CM3-U3-31S4C_$(arg right_camera_serial)/$(arg calibration)" />
+          <!-- Debayering nodelet -->
       </node>
 
       <!-- Debayering nodelet -->
-      <node pkg="nodelet" type="nodelet" name="image_proc_debayer" args="load image_proc/debayer /camera_nodelet_manager"/>
+      <node pkg="nodelet" type="nodelet" name="image_proc_debayer"
+          args="load image_proc/debayer /camera_nodelet_manager">
+      </node>
     </group>
 
     <!-- Stereo image processing nodelet -->
