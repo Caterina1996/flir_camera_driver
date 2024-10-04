@@ -37,7 +37,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <arg name="frame_id"                  default="Lanty_1" />
 
   <arg name="control_frame_rate"        default="true" />
-  <arg name="frame_rate"                default="8" />
+  <arg name="frame_rate"                default="4" />
 
   <arg name="run_stereo_image_proc"      default="true" />
   <arg name="params_file"                default="params_dynamic.yaml" />
@@ -46,7 +46,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
       disabled when using Bayer encoding (e.g. BayerRG8)-->
   <arg name="isp_enable"                default="False" /> 
   <arg name="encoding"                  default="BayerRG8" />
-  <arg name="color_balance"             default="Continuous" /> <!-- Off, Once, or Continuous -->
+  <arg name="color_balance"             default="Continuous" /> 
+  <!-- Off, Once, or Continuous -->
   <!-- Available Encodings:
         Mono:              YUV:              YCbCr:          Other:
         - Mono8            - YUV411Packed    - YCbCr8        - BGR8
@@ -78,6 +79,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
             args="load spinnaker_camera_driver/SpinnakerCameraNodelet /camera_nodelet_manager" output="screen">
         <param name="frame_id"                        value="camera_left" />
         <param name="serial"                          value="$(arg left_camera_serial)" />
+        <!-- <param name="flip"                            value="true" /> -->
 
         <!-- Frame rate -->
         <param name="acquisition_frame_rate_enable"   value="$(arg control_frame_rate)" />
@@ -99,6 +101,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
             args="load spinnaker_camera_driver/SpinnakerCameraNodelet /camera_nodelet_manager" output="screen">
         <param name="frame_id"                        value="camera_left" />
         <param name="serial"                          value="$(arg right_camera_serial)" />
+        <!-- <param name="flip"                            value="false" /> -->
 
         <!-- Frame rate -->
         <param name="acquisition_frame_rate_enable"   value="$(arg control_frame_rate)" />
