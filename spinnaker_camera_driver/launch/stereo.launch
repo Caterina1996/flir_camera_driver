@@ -29,8 +29,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <arg name="calibration"                default="calibration_pool.yaml" />
 
   <!-- IDS -->
-  <arg name="left_camera_serial"         default="22416604" /> <!-- MASTER (also 16401228)-->
-  <arg name="right_camera_serial"        default="22416601" /> <!-- SLAVE (also 16401229)-->
+  <arg name="left_camera_serial"         default="23045884" /> <!-- MASTER (also 16401228)-->
+  <arg name="right_camera_serial"        default="23045887" /> <!-- SLAVE (also 16401229)-->
 
   <arg name="calibrated"                default="true" />
   <arg name="device_type"               default="USB3" /> <!-- USB3 or GigE -->
@@ -101,9 +101,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
       <!-- Camera nodelet -->
       <node pkg="nodelet" type="nodelet" name="camera_nodelet"
             args="load spinnaker_camera_driver/SpinnakerCameraNodelet /camera_nodelet_manager" output="screen">
-        <param name="frame_id"                        value="camera_left" />
+        <param name="frame_id"                        value="camera_right" />
         <param name="serial"                          value="$(arg right_camera_serial)" />
-        <!-- <param name="flip"                            value="false" /> -->
+        <param name="flip"                            value="false" />
 
         <!-- Frame rate -->
         <param name="acquisition_frame_rate_enable"   value="$(arg control_frame_rate)" />

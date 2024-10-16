@@ -1,0 +1,24 @@
+#STEREO CH3 MASTER CONFIG DEEP SEA 
+
+# FRAME RATE
+acquisition_frame_rate_enable: True
+acquisition_frame_rate: 4.0
+
+# DIGITAL I/O FOR TRIGGER
+line_selector: Line2
+line_mode: Output
+line_source: ExposureActive
+
+# IMAGE FORMAT CONTROL
+image_format_color_coding: BayerRG8
+
+# EXPOSURE
+exposure_mode: Timed
+exposure_auto: 'Off' #Continuous'
+#auto_exposure_time_upper_limit: 40000.0 # microseconds
+exposure_time: 20000.0 #4500.0 # microseconds
+
+# GAIN
+gain_selector: All
+auto_gain: 'Off' #'Continuous'
+gain: 5.0
